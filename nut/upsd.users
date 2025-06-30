@@ -1,0 +1,8 @@
+[mon]
+  password = monpass
+  upsmon = slave
+
+[admin]
+  password = adminpass
+  actions = set
+  instcmds = all
