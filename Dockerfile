@@ -21,6 +21,7 @@ RUN echo "MODE=netserver" > /etc/nut/nut.conf \
  && echo "LISTEN 0.0.0.0 3493" > /etc/nut/upsd.conf \
  && chmod 640 /etc/nut/upsd.users \
  && chown root:nut /etc/nut/upsd.users \
+ && mkdir -p /var/log/nut/ /var/run/nut /var/log/nut /var/log/supervisor \
  && chmod +x /usr/local/bin/powerwatch.py
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
