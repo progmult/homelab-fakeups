@@ -8,11 +8,17 @@ RUN apt-get update && apt-get install -y \
     at \
     supervisor
 
+RUN apt-get install -y \
+    mc \
+    nano \
+    procps
+
 COPY nut/ /etc/nut/
 COPY powerwatch.py /usr/local/bin/powerwatch.py
 COPY supervisord.conf /etc/supervisord.conf
 
 RUN echo "MODE=netserver" > /etc/nut/nut.conf \
+ && echo "LISTEN 0.0.0.0 3493" > /etc/nut/upsd.conf \
  && chmod 640 /etc/nut/upsd.users \
  && chown root:nut /etc/nut/upsd.users \
  && chmod +x /usr/local/bin/powerwatch.py

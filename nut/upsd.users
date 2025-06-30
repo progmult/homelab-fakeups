@@ -1,6 +1,6 @@
 [mon]
   password = monpass
-  upsmon = master
+  upsmon master
 
 [admin]
   password = adminpass
