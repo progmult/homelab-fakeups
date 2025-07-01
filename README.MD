@@ -24,7 +24,6 @@ This project sets up a simulated UPS server using NUT (Network UPS Tools) inside
 ```bash
 docker-compose up --build -d
 ```
-
 This will build the container and run it in the background.
 
 ### Folder Structure
