@@ -5,7 +5,7 @@ from datetime import datetime
 SENTINELS = ["yandex.ru"]
 PING_INTERVAL = 5
 MAX_MISSED_WARN = 6
-MAX_MISSED_CRIT = 30
+MAX_MISSED_CRIT = 20
 UPS_NAME = "fakeups"
 UPS_USER = "admin"
 UPS_PASS = "adminpass"
