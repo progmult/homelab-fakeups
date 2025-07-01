@@ -34,7 +34,7 @@ def set_status(status):
         "upsrw", "-s", f"ups.status={status}",
         "-u", UPS_USER, "-p", UPS_PASS,
         f"{UPS_NAME}@localhost"
-        ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0)
+        ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 def trigger_fsd():
     # raises error, commented
