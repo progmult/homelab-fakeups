@@ -64,7 +64,7 @@ def main():
                 logging.critical("Battery critically low - switching to OB LB")
                 set_status("OB LB")
                 #trigger_fsd()
-                break
+                #break
         time.sleep(PING_INTERVAL)
 
 if __name__ == "__main__":
