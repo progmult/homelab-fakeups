@@ -105,13 +105,13 @@ upsc qnapups@<docker-host-ip> #special virtual ups for qnap
 Only password-protected local access is enabled by default. The container does **not** SSH into other devices to shut them down. This is intentional to avoid storing secrets inside the container.
 
 ## ⚠️ Important Notes
-FakeUPS relies on pinging network devices to detect power loss. This method does not directly monitor electrical power. As a result, false shutdown signals may occur if the monitored device restarts, loses network connectivity, or its IP becomes temporarily unreachable (e.g., due to internet issues or device reboots).
+FakeUPS relies on pinging network devices to detect power loss. This method does **not** directly monitor electrical power. As a result, false shutdown signals may occur if the monitored device restarts, loses network connectivity, or its IP becomes temporarily unreachable (e.g., due to internet issues or device reboots).
 
-To minimize false positives:
+By default, FakeUPS pings `192.168.3.1` and `google.com`. To minimize false positives:
 
-- Choose sentinel devices that are always on, on local network, and not protected by a UPS;
+- Choose sentinel devices that are **always on**, **on local network**, and **not protected by a UPS**;
 
-- Alternatively, choose devices that lose network connectivity when power is lost, such as a router connected through an unprotected switch.
+- Alternatively, choose devices that **lose network connectivity when power is lost** (such as a router connected through an unprotected switch).
 
 When performing maintenance or rebooting monitored devices, stop FakeUPS first:
 
@@ -124,6 +124,7 @@ Then start it again after:
 ```bash
 docker start fakeups
 ```
+
 
 ## License
 
