@@ -1,15 +1,38 @@
-# FakeUPS Docker Setup
+# FakeUPS: Virtual UPS for Home Infrastructure
 
-This project sets up a simulated UPS server using NUT (Network UPS Tools) inside a Docker container. It includes a watcher script that monitors power status by pinging configured devices and changes the UPS status accordingly. Clients on the network can connect and shut down gracefully based on the reported UPS status.
+FakeUPS is a Docker container that emulates a UPS (Uninterruptible Power Supply) using Network UPS Tools (NUT). It enables devices on your network to respond properly to power outages — without requiring a physical USB connection to a real UPS.
 
-## Features
+## About 
+
+### How It Works
+
+- Pings key devices on the local network (e.g. router, server without UPS);
+
+- If those devices become unreachable, it simulates a power failure by setting the UPS status to OB (on battery) or OB LB (low battery);
+
+- Once devices are reachable again, it restores the status to OL (online).
+
+### Why Use It
+
+✅ Notifies QNAP, Synology, ESXi, and other clients about power events;
+
+✅ Allows clients to shutdown safely or enter a low-power state;
+
+✅ No physical UPS connection or USB required;
+
+✅ No need to store passwords or SSH credentials;
+
+✅ Runs as a Docker container on Raspberry Pi or any Linux host.
+
+### When to Use
+FakeUPS is ideal if you have multiple devices connected to a single physical UPS **without USB interface**, and you need centralized power status management across your network.
+
+### Architecture
 
 * Simulated UPS using `dummy-ups` driver;
 * UPS status served over the network on port 3493;
 * Python script `powerwatch.py` watches network devices and updates UPS status (`OL`, `OB`, `OB LB`);
 * Logs in monolog-style format to a mounted directory;
-* Works on Raspberry Pi 2 (and maybe another arm);
-* Dockerized to deploy.
 
 ## Usage
 
