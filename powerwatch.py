@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import subprocess, time
 
-SENTINELS = ["192.168.1.50"]    # IP устройств без ИБП
+SENTINELS = ["yandex.ru"]
 PING_INTERVAL = 5
 MAX_MISSED = 6
 UPS_NAME = "fakeups"
@@ -33,7 +33,7 @@ def main():
             misses += 1
             if misses >= MAX_MISSED:
                 set_status("OB", 10)
-                #trigger_fsd()
+               	#trigger_fsd()
                 break
         time.sleep(PING_INTERVAL)
 
