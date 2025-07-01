@@ -12,11 +12,11 @@ UPS_PASS = "adminpass"
 
 # Setup logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='[%(asctime)s] %(levelname)s: %(message)s',
-    datefmt='%Y-%m-%dT%H:%M:%S',
-    handlers=[logging.FileHandler("/var/log/nut/powerwatch.log"), logging.StreamHandler()]
-)
+        level=logging.INFO,
+        format='[%(asctime)s] %(levelname)s: %(message)s',
+        datefmt='%Y-%m-%dT%H:%M:%S',
+        handlers=[logging.FileHandler("/var/log/nut/powerwatch.log"), logging.StreamHandler()]
+        )
 
 try:
     import sentry_sdk
@@ -26,15 +26,15 @@ except ImportError:
 
 def ping(host):
     return subprocess.call(["ping", "-c", "1", "-W", "1", host],
-                           stdout=subprocess.DEVNULL,
-                           stderr=subprocess.DEVNULL) == 0
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL) == 0
 
 def set_status(status):
-     result = subprocess.call([
+    result = subprocess.call([
         "upsrw", "-s", f"ups.status={status}",
         "-u", UPS_USER, "-p", UPS_PASS,
         f"{UPS_NAME}@localhost"
-    ], capture_output=True, text=True)
+        ], capture_output=True, text=True)
     if result.returncode == 0:
         logging.info("Set status to {status}")
     else:
@@ -45,7 +45,7 @@ def trigger_fsd():
     subprocess.call([
         "upscmd", "-u", UPS_USER, "-p", UPS_PASS,
         f"{UPS_NAME}@localhost", "fsd"
-    ])
+        ])
 
 def main():
     misses = 0
