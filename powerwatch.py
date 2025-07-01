@@ -6,7 +6,7 @@ SENTINELS = ["yandex.ru"]
 PING_INTERVAL = 5
 MAX_MISSED_WARN = 6
 MAX_MISSED_CRIT = 20
-UPS_NAME = "fakeups"
+UPS_NAMES = ["fakeups", "qnapups"] # virtual UPS list
 UPS_USER = "admin"
 UPS_PASS = "adminpass"
 
@@ -30,18 +30,20 @@ def ping(host):
             stderr=subprocess.DEVNULL) == 0
 
 def set_status(status):
-    subprocess.call([
-        "upsrw", "-s", f"ups.status={status}",
-        "-u", UPS_USER, "-p", UPS_PASS,
-        f"{UPS_NAME}@localhost"
-        ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    for ups in UPS_NAMES:
+        subprocess.call([
+            "upsrw", "-s", f"ups.status={status}",
+            "-u", UPS_USER, "-p", UPS_PASS,
+            f"{ups}@localhost"
+            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 def trigger_fsd():
     # raises error, commented
-    subprocess.call([
-        "upscmd", "-u", UPS_USER, "-p", UPS_PASS,
-        f"{UPS_NAME}@localhost", "fsd"
-        ])
+    for ups in UPS_NAMES:
+        subprocess.call([
+            "upscmd", "-u", UPS_USER, "-p", UPS_PASS,
+            f"{ups}@localhost", "fsd"
+            ])
 
 def main():
     misses = 0
