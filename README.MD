@@ -4,13 +4,12 @@ This project sets up a simulated UPS server using NUT (Network UPS Tools) inside
 
 ## Features
 
-* Simulated UPS using `dummy-ups` driver.
-* UPS status served over the network on port 3493.
-* Python script `powerwatch.py` watches network devices and updates UPS status (`OL`, `OB`, `OB LB`).
-* Automatically triggers FSD (Forced Shutdown) if power outage persists.
-* Logs in monolog-style format to a mounted directory.
-* Works on Raspberry Pi 2 (and maybe another arm).
-* Dockerized and easy to deploy.
+* Simulated UPS using `dummy-ups` driver;
+* UPS status served over the network on port 3493;
+* Python script `powerwatch.py` watches network devices and updates UPS status (`OL`, `OB`, `OB LB`);
+* Logs in monolog-style format to a mounted directory;
+* Works on Raspberry Pi 2 (and maybe another arm);
+* Dockerized to deploy.
 
 ## Usage
 
