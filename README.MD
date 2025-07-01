@@ -18,7 +18,7 @@ FakeUPS is a Docker container that emulates a UPS (Uninterruptible Power Supply)
 
 ✅ Allows clients to shutdown safely or enter a low-power state;
 
-✅ No physical UPS connection or USB required;
+✅ UPS doesn't have a USB port;
 
 ✅ No need to store passwords or SSH credentials;
 
