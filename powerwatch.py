@@ -16,8 +16,8 @@ def ping(host):
 def set_status(status, charge):
     subprocess.call(["upsrw", "-s", f"ups.status={status}",
                      "-u", UPS_USER, "-p", UPS_PASS, f"{UPS_NAME}@localhost"])
-    subprocess.call(["upsrw", "-s", f"battery.charge={charge}",
-                     "-u", UPS_USER, "-p", UPS_PASS, f"{UPS_NAME}@localhost"])
+    #subprocess.call(["upsrw", "-s", f"battery.charge={charge}",
+    #                 "-u", UPS_USER, "-p", UPS_PASS, f"{UPS_NAME}@localhost"])
 
 def trigger_fsd():
     subprocess.call(["upscmd", "-u", UPS_USER, "-p", UPS_PASS,
@@ -33,7 +33,7 @@ def main():
             misses += 1
             if misses >= MAX_MISSED:
                 set_status("OB", 10)
-                trigger_fsd()
+                #trigger_fsd()
                 break
         time.sleep(PING_INTERVAL)
 
