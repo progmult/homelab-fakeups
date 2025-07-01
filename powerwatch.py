@@ -8,6 +8,14 @@ UPS_NAME = "fakeups"
 UPS_USER = "admin"
 UPS_PASS = "adminpass"
 
+
+
+print("Powerwatch starting with:")
+print(f"  SENTINELS = {SENTINELS}")
+print(f"  UPS_NAME = {UPS_NAME}")
+print(f"  UPS_USER = {UPS_USER}")
+print(f"  UPS_PASS = {'*' * len(UPS_PASS)}")
+
 def ping(host):
     return subprocess.call(["ping", "-c", "1", "-W", "1", host],
                            stdout=subprocess.DEVNULL,
@@ -25,16 +33,22 @@ def trigger_fsd():
 
 def main():
     misses = 0
+    on_battery = False
     while True:
-        if any(ping(h) for h in SENTINELS):
+        if any(ping(h) for h in SENTINELS if h.strip()):
+            if on_battery:
+                print("Power restored. Setting status to OL")
+                set_status("OL", 100)
+                on_battery = False
             misses = 0
-            set_status("OL", 100)
         else:
             misses += 1
-            if misses >= MAX_MISSED:
+            print(f"Missed {misses} pings")
+            if not on_battery and misses >= MAX_MISSED:
+                print("Triggering OB state")
                 set_status("OB", 10)
-               	#trigger_fsd()
-                break
+                trigger_fsd()
+                on_battery = True
         time.sleep(PING_INTERVAL)
 
 if __name__ == "__main__":
