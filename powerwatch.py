@@ -30,15 +30,11 @@ def ping(host):
             stderr=subprocess.DEVNULL) == 0
 
 def set_status(status):
-    result = subprocess.call([
+    subprocess.call([
         "upsrw", "-s", f"ups.status={status}",
         "-u", UPS_USER, "-p", UPS_PASS,
         f"{UPS_NAME}@localhost"
-        ], capture_output=True, text=True)
-    if result.returncode == 0:
-        logging.info("Set status to {status}")
-    else:
-        logging.error("Failed to set status: {result.stderr.strip()}")
+        ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0)
 
 def trigger_fsd():
     # raises error, commented
