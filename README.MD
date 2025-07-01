@@ -72,6 +72,7 @@ Clients on your LAN can connect to the container at port 3493 and use `upsmon`, 
 
 ```bash
 upsc fakeups@<docker-host-ip>
+upsc qnapups@<docker-host-ip> #special virtual ups for qnap
 ```
 
 ### Optional: Sentry Support
