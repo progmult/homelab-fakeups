@@ -1,5 +1,6 @@
 # Dockerfile for Raspberry Pi (ARMv7) with NUT + dummy-ups + powerwatch
-FROM arm32v7/debian:bullseye-slim
+# Dockerfile
+FROM debian:bullseye-slim
 
 RUN apt-get update && apt-get install -y \
     nut \
@@ -13,15 +14,11 @@ RUN apt-get install -y \
     nano \
     procps
 
-COPY nut/ /etc/nut/
+RUN mkdir -p /var/run/nut /var/log/nut && \
+    useradd -r -s /sbin/nologin nut || true
+
+COPY nut /etc/nut/
 COPY powerwatch.py /usr/local/bin/powerwatch.py
 COPY supervisord.conf /etc/supervisord.conf
-
-RUN echo "MODE=netserver" > /etc/nut/nut.conf \
- && echo "LISTEN 0.0.0.0 3493" > /etc/nut/upsd.conf \
- && chmod 640 /etc/nut/upsd.users \
- && chown root:nut /etc/nut/upsd.users \
- && mkdir -p /var/log/nut/ /var/run/nut /var/log/nut /var/log/supervisor \
- && chmod +x /usr/local/bin/powerwatch.py
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
