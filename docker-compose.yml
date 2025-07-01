@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  fakeups:
+    build: .
+    container_name: fakeups
+    ports:
+      - "3493:3493"
+    volumes:
+      - ./logs:/var/log/nut
+    restart: unless-stopped
