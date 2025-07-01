@@ -1,60 +1,74 @@
 #!/usr/bin/env python3
-import subprocess
-import time
+import subprocess, time, logging
 from datetime import datetime
-
-# ==== Настройки ====
+# ==== Settings ====
 SENTINELS = ["yandex.ru"]
 PING_INTERVAL = 5
-MAX_MISSED = 6
+MAX_MISSED_WARN = 6
+MAX_MISSED_CRIT = 30
 UPS_NAME = "fakeups"
 UPS_USER = "admin"
 UPS_PASS = "adminpass"
 
-# ==== Логирование ====
-def log(level, message):
-    timestamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
-    print(f"{timestamp} {level.upper()}: {message}")
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s] %(levelname)s: %(message)s',
+    datefmt='%Y-%m-%dT%H:%M:%S',
+    handlers=[logging.FileHandler("/var/log/nut/powerwatch.log"), logging.StreamHandler()]
+)
 
-# ==== Пинг утилита ====
+try:
+    import sentry_sdk
+    sentry_sdk.init(dsn="", traces_sample_rate=1.0)  # Fill in DSN if needed
+except ImportError:
+    pass
+
 def ping(host):
     return subprocess.call(["ping", "-c", "1", "-W", "1", host],
                            stdout=subprocess.DEVNULL,
                            stderr=subprocess.DEVNULL) == 0
 
-# ==== Изменение статуса ====
 def set_status(status):
-    result = subprocess.run([
+     result = subprocess.call([
         "upsrw", "-s", f"ups.status={status}",
-        "-u", UPS_USER, "-p", UPS_PASS, f"{UPS_NAME}@localhost"
+        "-u", UPS_USER, "-p", UPS_PASS,
+        f"{UPS_NAME}@localhost"
     ], capture_output=True, text=True)
     if result.returncode == 0:
-        log("info", f"Set status to {status}")
+        logging.info("Set status to {status}")
     else:
-        log("error", f"Failed to set status: {result.stderr.strip()}")
+        logging.error("Failed to set status: {result.stderr.strip()}")
 
-# ==== Главный цикл ====
+def trigger_fsd():
+    # raises error, commented
+    subprocess.call([
+        "upscmd", "-u", UPS_USER, "-p", UPS_PASS,
+        f"{UPS_NAME}@localhost", "fsd"
+    ])
+
 def main():
     misses = 0
-    power_lost = False
+    on_battery = False
 
     while True:
-        alive = any(ping(host) for host in SENTINELS)
-
-        if alive:
-            if power_lost:
-                log("notice", "Power restored")
+        if any(ping(h) for h in SENTINELS):
+            if on_battery:
+                logging.info("Power restored")
                 set_status("OL")
-                power_lost = False
+                on_battery = False
             misses = 0
         else:
             misses += 1
-            log("warning", f"Missed ping ({misses}/{MAX_MISSED})")
-            if not power_lost and misses >= MAX_MISSED:
-                log("critical", "Power lost — switching to battery")
+            if misses == MAX_MISSED_WARN:
+                logging.warning("Power lost - switching to OB")
+                set_status("OB")
+                on_battery = True
+            elif misses == MAX_MISSED_CRIT:
+                logging.critical("Battery critically low - switching to OB LB")
                 set_status("OB LB")
-                power_lost = True
-
+                #trigger_fsd()
+                break
         time.sleep(PING_INTERVAL)
 
 if __name__ == "__main__":
