@@ -1,14 +1,16 @@
 # FakeUPS: Virtual UPS for Home Infrastructure
 
-FakeUPS is a Docker container that emulates a UPS (Uninterruptible Power Supply) using Network UPS Tools (NUT). It enables devices on your network to respond properly to power outages — without requiring a physical USB connection to a real UPS.
+Emulates a UPS (Uninterruptible Power Supply) using [Network UPS Tools](https://github.com/networkupstools/nut) (NUT) for basic setups where clients are powered by a UPS without USB — triggers safe shutdowns by monitoring network power-dependent device availability.
+
+It helps devices on your network to respond properly to power outages.
 
 ## About 
 
 ### How It Works
 
-- Pings key devices on the local network (e.g. router, server without UPS);
+- Pings power-dependent devices on the local network (e.g. router, server without UPS);
 
-- If those devices become unreachable, it simulates a power failure by setting the UPS status to OB (on battery) or OB LB (low battery);
+- If those devices become unreachable, it simulates a power failure by setting the [Dummy UPS](https://networkupstools.org/docs/man/dummy-ups.html) status to OB (on battery) or OB LB (low battery);
 
 - Once devices are reachable again, it restores the status to OL (online).
 
@@ -18,14 +20,12 @@ FakeUPS is a Docker container that emulates a UPS (Uninterruptible Power Supply)
 
 ✅ Allows clients to shutdown safely or enter a low-power state;
 
-✅ UPS doesn't have a USB port;
-
 ✅ No need to store passwords or SSH credentials;
 
 ✅ Runs as a Docker container on Raspberry Pi or any Linux host.
 
 ### When to Use
-FakeUPS is ideal if you have multiple devices connected to a single physical UPS **without USB interface**, and you need centralized power status management across your network.
+FakeUPS is ideal if you have multiple devices connected to a single physical UPS **without USB interface**, and don't wanna manually power it off.
 
 ### Architecture
 
@@ -100,18 +100,14 @@ upsc qnapups@<docker-host-ip> #special virtual ups for qnap
 
 `powerwatch.py` attempts to import and initialize Sentry if the SDK is installed. You can add your Sentry DSN in the `sentry_sdk.init()` call.
 
-## Security Note
+## ⚠️ Important Note
+FakeUPS relies on pinging power-dependent network devices to detect power loss. This method does **not** directly monitor electrical power. As a result, false shutdown signals may occur if the monitored device restarts, loses network connectivity, or its IP becomes temporarily unreachable (e.g., due to internet issues or device reboots).
 
-Only password-protected local access is enabled by default. The container does **not** SSH into other devices to shut them down. This is intentional to avoid storing secrets inside the container.
+By default, FakeUPS pings `192.168.3.1` and `google.com`. To minimize false positives:
 
-## ⚠️ Important Notes
-FakeUPS relies on pinging network devices to detect power loss. This method does not directly monitor electrical power. As a result, false shutdown signals may occur if the monitored device restarts, loses network connectivity, or its IP becomes temporarily unreachable (e.g., due to internet issues or device reboots).
+- Choose sentinel devices that are **always on**, **on local network**, and **not protected by a UPS**;
 
-To minimize false positives:
-
-- Choose sentinel devices that are always on, on local network, and not protected by a UPS;
-
-- Alternatively, choose devices that lose network connectivity when power is lost, such as a router connected through an unprotected switch.
+- Alternatively, choose devices that **lose network connectivity when power is lost** (such as a router connected through an unprotected switch).
 
 When performing maintenance or rebooting monitored devices, stop FakeUPS first:
 
@@ -124,6 +120,7 @@ Then start it again after:
 ```bash
 docker start fakeups
 ```
+
 
 ## License
 

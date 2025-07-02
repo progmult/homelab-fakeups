@@ -2,7 +2,7 @@
 import subprocess, time, logging
 from datetime import datetime
 # ==== Settings ====
-SENTINELS = ["yandex.ru"]
+SENTINELS = ["192.168.3.1", "google.com"]
 PING_INTERVAL = 5
 MAX_MISSED_WARN = 6
 MAX_MISSED_CRIT = 20
