@@ -1,5 +1,7 @@
 # FakeUPS: Virtual UPS for Home Infrastructure
 
+Emulates a UPS for setups where clients are powered by a UPS without USB — triggers safe shutdowns by monitoring network device availability.
+
 FakeUPS is a Docker container that emulates a UPS (Uninterruptible Power Supply) using Network UPS Tools (NUT). It enables devices on your network to respond properly to power outages — without requiring a physical USB connection to a real UPS.
 
 ## About 
