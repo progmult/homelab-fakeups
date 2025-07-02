@@ -1,8 +1,8 @@
 # FakeUPS: Virtual UPS for Home Infrastructure
 
-Emulates a UPS (Uninterruptible Power Supply) using [Network UPS Tools](https://github.com/networkupstools/nut) (NUT) for setups where clients are powered by a UPS without USB — triggers safe shutdowns by monitoring network power-dependent device availability.
+Emulates a UPS (Uninterruptible Power Supply) using [Network UPS Tools](https://github.com/networkupstools/nut) (NUT) for basic setups where clients are powered by a UPS without USB — triggers safe shutdowns by monitoring network power-dependent device availability.
 
-It helps enables devices on your network to respond properly to power outages.
+It helps devices on your network to respond properly to power outages.
 
 ## About 
 
@@ -25,7 +25,7 @@ It helps enables devices on your network to respond properly to power outages.
 ✅ Runs as a Docker container on Raspberry Pi or any Linux host.
 
 ### When to Use
-FakeUPS is ideal if you have multiple devices connected to a single physical UPS **without USB interface**, and you need centralized power status management across your network.
+FakeUPS is ideal if you have multiple devices connected to a single physical UPS **without USB interface**, and don't wanna manually power it off.
 
 ### Architecture
 
