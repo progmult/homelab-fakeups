@@ -18,5 +18,7 @@ RUN mkdir -p /var/run/nut /var/log/nut && \
 COPY nut /etc/nut/
 COPY powerwatch.py /usr/local/bin/powerwatch.py
 COPY supervisord.conf /etc/supervisord.conf
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+ENTRYPOINT ["/entrypoint.sh"]
