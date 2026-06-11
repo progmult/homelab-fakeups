@@ -7,9 +7,7 @@ RUN apt-get update && apt-get install -y \
     python3 \
     iputils-ping \
     at \
-    supervisor
-
-RUN apt-get install -y \
+    supervisor \
     mc \
     nano \
     procps
