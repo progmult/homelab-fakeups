@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+mkdir -p /run/nut
+chown nut:nut /run/nut
+chmod 750 /etc/nut/upsd.conf /etc/nut/upsd.users
+
 echo "Starting NUT drivers..."
 upsdrvctl -u nut start
 sleep 3
