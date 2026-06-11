@@ -51,11 +51,11 @@ def main():
 
     while True:
         if any(ping(h) for h in SENTINELS):
+            misses = 0
             if on_battery:
                 logging.info("Power restored")
                 set_status("OL")
                 on_battery = False
-            misses = 0
         else:
             misses += 1
             if misses == MAX_MISSED_WARN:
