@@ -3,7 +3,8 @@ set -e
 
 mkdir -p /run/nut
 chown nut:nut /run/nut
-chmod 750 /etc/nut/upsd.conf /etc/nut/upsd.users
+chown root:nut /etc/nut/upsd.conf /etc/nut/upsd.users
+chmod 640 /etc/nut/upsd.conf /etc/nut/upsd.users
 
 echo "Starting NUT drivers..."
 upsdrvctl -u nut start
